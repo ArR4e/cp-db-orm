@@ -1,41 +1,79 @@
 import os
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
+
+from . import auth
+from . import blog
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+app = Flask(__name__, instance_relative_config=True)
+
+app.debug = True
+
+app.config['DATABASE'] = os.path.join(app.root_path, 'database.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SECRET_KEY'] = 'dev'
+app.config['SECRET_KEY'] = 'dev'
 
 
-def create_app(test_config=None):
-    # create and configure the application
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'application.sqlite'),
-    )
+# a simple page that says hello
+@app.route('/hello')
+def hello():
+    return 'Hello, World!'
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
+app.register_blueprint(auth.bp)
 
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+app.register_blueprint(blog.bp)
+app.add_url_rule('/', endpoint='index')
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+db = SQLAlchemy(app)
 
-    from . import db
-    db.init_app(app)
+class User(db.Model):
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True)
+    password = db.Column(db.String(80), unique=True)
 
-    from . import auth
-    app.register_blueprint(auth.bp)
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
 
-    from . import blog
-    app.register_blueprint(blog.bp)
-    app.add_url_rule('/', endpoint='index')
+    def __repr__(self):
+        return '<User %r>' % self.username
 
-    return app
+
+class Post(db.Model):
+    __tablename__ = 'post'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80))
+    body = db.Column(db.Text)
+    created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    username = ''
+
+    def __init__(self, title, body, author_id):
+        self.title = title
+        self.body = body
+        self.author_id = author_id
+
+    @staticmethod
+    def withUser(post, user):
+        return {
+            'id': post.id,
+            'title': post.title,
+            'body': post.body,
+            'created': post.created,
+            'author_id': post.author_id,
+            'username': user.username
+        }
+
+
+
+# Only use for initializing the db
+# db.create_all()
+# db.session.commit()
+

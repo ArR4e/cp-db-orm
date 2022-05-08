@@ -1,86 +1,53 @@
-<h1>Developer and Databeses 101</h1>
+<h1>Developer and Databeses 102 (Assignment 2)</h1>
+
+**Greetings, wanderer!** We meet again... this time, as promised we will take a look inside world of ORMs and try it out ourselves.
 
 NB! If you have questions you can write to Karel Paan <code>(karelpaan#2890)</code> in Discord chat ;)
 
-**Greetings, wanderer!** You have found yourself on a quest to get to know more about the life of a database and how it is used in "real life".
-Keep in mind that this is only one of many uses for a database. Development being the most common usa we will be talking about just that. And ofcourse you will have plenty of opporunities to make your hands dirty. 
+<h2>Assignment 2 (The real deal)</h2>
 
-Note that this application is not ment to look "nice" or give the best user experience but only to give you an **insight into databases in development**.
-
-Furthermore, this application uses rather old way of designing an application (<u>monolithic architecture</u>).
-This is not to say it is good or bad, although nowadays using <u>microservice architecture</u> is much more common, the main thing here is that you get to know databases and get some experience using them in application development.
-
-It is also recommended googling the underlined words ;).
-
-<h2>Setup</h2>
-
-FORK the repository to your local machine (if you haven't already). I do recommend the web version, but it is up to you.
-<a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">HINT</a>
-
-<h4>Install all necessary packages</h4>
-```bash
-$ pip install -r requirements.txt
-```
-
-To run the application you must first setup environment variables like so:
-<h4>Mac</h4>
-```bash
-$ export FLASK_APP=application
-$ export FLASK_ENV=development
-```
-
-<h4>Linux</h4>
-```bash
-> set FLASK_APP=application
-> set FLASK_ENV=development
-```
-
-<h4>Windows</h4>
-```bash
-> $env:FLASK_APP = "application"
-> $env:FLASK_ENV = "development"
-```
-
-<h3>Init DB</h3>
-```bash
-flask init-db
-```
-<h3>Run</h3>
-```bash
-flask run
-```
-
-<h2>Assignment 0</h2>
-
+<hr>
 <div style="background-color: rgba(82,63,63,0.78); padding: 0.1rem 1rem; border-radius: 20px">
-For your changes to work you need to rerun the project after every change, this process is mad easy by PyCharm ;).
+
+Now to the main part of this exercise... ORM ([Object–relational mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)).
+
+ORM offers us a nice way to describe our database inside our code, which also unites the database objects with the back-end objects.
+
+ORM makes it easy to maintain models and develop fast and reliably.
+
+The main trade-off with ORM is that it does not perform queries as fast as native SQL scripts and can it can have difficulties when implementing niche models/relations.
+The latter and sometimes the first can be averted by adding custom SQL to problematic pieces.
+
+
+As with all things IT, there is no clear benefit but the decision should be made considering the complexity and the required time of a certain system.
+
+We will also implement ORM in our project, for this we use SQLAlchemy, the most popular ORM for python.
+
+As you see, SQLAlchemy is no magic and it works perfectly together with pure SQL from our previous example (<code>auth.py</code>).
+Basically it is a neat way to write SQL :D.
+
+To understand what is going on, check <code>application/__init__.py</code>
 </div>
 
-<ul>
- <li>Read the before manual, start the application 
- (default port is 5000, if you waht to change that, use `flask run --host=0.0.0.0 --port=80`)</li>
- <li>Register an account</li>
- <li>Log in</li>
- <li>Create a post</li>
- <li>Try to edit a post (THIS SHOULDN'T WORK)</li>
-</ul>
-
-<h2>Assignment 1</h2>
-Your first task is to implement SQL queries `get_post` and `update` inside application/blog.py.
-Tip: Look at `index` and `create` functions respectively.
-<ul>
- <li>Implement beforementioned SQL scripts</li>
- <li>Try to edit a post again, now it should be working, if not, you did something wrong!</li>
-</ul>
-
-<h2>Running tests</h2>
-If all assignments are done correctly then all tests should pass.
-(You can also run the tests inside PyCharm, it makes no difference.)
-```bash
- python -m pytest tests
-```
-
-<h2>Assignment 2</h2>
+<h3>Tasks</h3>
+(Everything should be done inside <code>blog.py</code> file)
+Tasks require you to search individually, you can find help in Google or in <a href="https://docs.sqlalchemy.org/en/14/">HERE</a>.
+<ol>
+    <li>Implement <code>get_post</code> function's SQL</li>
+    <li>Implement <code>update</code> function's SQL</li>
+    <li>Implement <code>search</code> function's SQL, you can test this by querying in the GUI ;)</li>
+</ol>
 <hr>
-<h3>NB! To start Assignmet 2 checkout to branch "assignment2"!</h3>
-<hr>
+
+<div style="background-color: rgba(82,63,63,0.78); padding: 0.1rem 1rem; border-radius: 20px">
+
+A little more info before you go, hope you liked the tasks given and decide to create your own application someday or why not <strong>today</strong>.
+
+Keep in mind the example we used here today is not to show the best layout for a web project rather than show you the cool opportunities that databases offer.
+
+E.g. a real application would use <u>migrations</u> and keep models in different files for better structure and readability. If you have questions, then Google it ;). 
+</div>
+
+<h2>Deliverables</h2>
+The end result should pass all tests that are written for you. There is no point in fooling said tests as they are only there for your benefit!
+If all is well, share the repository (GitHub) link with Karel Paan <code>(karelpaan#2890)</code> in Discord.

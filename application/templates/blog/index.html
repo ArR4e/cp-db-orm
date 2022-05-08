@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Posts{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="{{ url_for('blog.create') }}">New</a>
-  {% endif %}
+    <div style="width: 100% !important;display: flex;">
+      <h1>{% block title %}Posts{% endblock %}</h1>
+      {% if g.user %}
+        <a class="action" href="{{ url_for('blog.create') }}">New</a>
+      {% endif %}    
+    </div>
+    <div>
+      <form method="post">
+          <div style="display:flex;">
+              <input name="query" id="query" type="text" style="width: 8rem; margin-right: 1rem">
+              <input type="submit" value="Search">
+          </div>
+      </form>
+    </div>
 {% endblock %}
 
 {% block content %}
